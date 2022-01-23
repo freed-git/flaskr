@@ -14,6 +14,18 @@ spec:
       labels:
         app: flaskr
     spec:
+      initContainers:
+      - name: init-sqlite
+        image: deepvoid/flaskr
+        env:
+          - name: FLASK_APP
+            value: "flaskr"
+          - name: FLASK_ENV
+            value: "development"
+        command: ['flask', 'init-db']
+        volumeMounts:
+        - name: db-volume
+          mountPath: /app/instance
       containers:
       - name: flaskr
         image: deepvoid/flaskr
@@ -26,5 +38,11 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+        volumeMounts:
+        - name: db-volume
+          mountPath: /app/instance
       imagePullSecrets:
         - name: regcred
+      volumes:
+        - name: db-volume
+          emptyDir: {}
