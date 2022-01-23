@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flaskr
+  annotations:
+    # external-dns.alpha.kubernetes.io/target: 70.81.44.84
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: flaskr.deepvoid.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flaskr
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - flaskr.deepvoid.io
+      secretName: flaskr-deepvoid-io-tls

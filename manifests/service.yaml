@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskr
+spec:
+  type: ClusterIP
+  selector:
+    app: flaskr
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
