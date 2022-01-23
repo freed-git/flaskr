@@ -1,5 +1,5 @@
 import os
-# from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
 # https://opentelemetry-python-contrib.readthedocs.io/en/latest/instrumentation/flask/flask.html
 # https://grafana.com/docs/tempo/latest/getting-started/
@@ -12,7 +12,7 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
-    # FlaskInstrumentor().instrument_app(app)
+    FlaskInstrumentor().instrument_app(app)
 
 
     app.config.from_mapping(
