@@ -1,7 +1,4 @@
-FROM ubuntu:20.04
-
-RUN apt-get update -y && \
-    apt-get install -y python3-pip python3-dev
+FROM python:3.8-slim-buster
 
 COPY ./requirements.txt /app/requirements.txt
 
