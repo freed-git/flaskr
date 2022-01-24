@@ -29,6 +29,9 @@ spec:
       containers:
       - name: flaskr
         image: deepvoid/flaskr
+        env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
         ports:
         - containerPort: 8080
         resources:
