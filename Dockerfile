@@ -1,5 +1,8 @@
 FROM python:3.8-slim-buster
 
+ENV FLASK_APP=flaskr
+ENV FLASK_ENV=development
+
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
@@ -10,4 +13,4 @@ COPY . /app
 
 ENTRYPOINT [ "flask" ]
 
-CMD [ "run" ]
+CMD [ "run", "--host", "0.0.0.0" ]
