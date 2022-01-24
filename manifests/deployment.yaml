@@ -29,6 +29,7 @@ spec:
       containers:
       - name: flaskr
         image: deepvoid/flaskr
+        imagePullPolicy: Always
         env:
           - name: PYTHONUNBUFFERED
             value: "1"

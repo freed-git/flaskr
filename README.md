@@ -38,3 +38,7 @@ kubectl get ing -n flaskr
 # verify tls certificate
 kubectl get cert -n flaskr
 ```
+
+```
+waitress-serve --listen=127.0.0.1:8080 --call flaskr:create_app
+```
