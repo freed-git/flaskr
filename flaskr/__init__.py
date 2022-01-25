@@ -12,8 +12,8 @@ from flask import Flask
 # logger = logging.getLogger('waitress')
 # logger.setLevel(logging.DEBUG)
 
-# import logging
-# logging.basicConfig(level=logging.DEBUG)
+import logging
+
 
 # dictConfig({
 #     'version': 1,
@@ -32,6 +32,8 @@ from flask import Flask
 # })
 
 def create_app(test_config=None):
+    logging.basicConfig(level=logging.DEBUG)
+
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
