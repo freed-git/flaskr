@@ -17,7 +17,7 @@ spec:
               service:
                 name: flaskr
                 port:
-                  number: 8080
+                  number: 5000
   tls:
     - hosts:
         - flaskr.deepvoid.io
