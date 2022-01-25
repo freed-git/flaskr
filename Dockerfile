@@ -11,6 +11,10 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "flask" ]
+# ENTRYPOINT [ "flask" ]
 
-CMD [ "run", "--host", "0.0.0.0" ]
+# CMD [ "run", "--host", "0.0.0.0" ]
+
+ENTRYPOINT [ "waitress-serve" ]
+
+CMD [ "--call", "flaskr:create_app" ]
