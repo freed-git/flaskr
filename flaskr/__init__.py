@@ -3,28 +3,47 @@ import requests
 import os
 import logging
 from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    ConsoleSpanExporter,
-    SimpleExportSpanProcessor
-)
+
+# from opentelemetry.sdk.trace.export import (
+#     BatchSpanProcessor,
+#     ConsoleSpanExporter
+# )
 
 
 def create_app(test_config=None):
     logging.basicConfig(level=logging.DEBUG)
 
-    trace.set_tracer_provider(TracerProvider())
-    trace.get_tracer_provider().add_span_processor(
-        SimpleExportSpanProcessor(ConsoleSpanExporter())
+    trace.set_tracer_provider(
+        TracerProvider(
+            resource=Resource.create({SERVICE_NAME: "flaskr"})
+        )
     )
+
+    jaeger_exporter = JaegerExporter(
+        agent_host_name="tempo-distributed-distributor.tempo-distributed",
+        agent_port=6831,
+    )
+
+    trace.get_tracer_provider().add_span_processor(
+        BatchSpanProcessor(jaeger_exporter)
+    )
+
+    # trace.set_tracer_provider(TracerProvider())
+    # trace.get_tracer_provider().add_span_processor(
+    #     BatchSpanProcessor(ConsoleSpanExporter())
+    # )
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
-    FlaskInstrumentor().instrument_app(app)
-    RequestsInstrumentor().instrument()
+    # FlaskInstrumentor().instrument_app(app)
+    # RequestsInstrumentor().instrument()
 
     app.config.from_mapping(
         SECRET_KEY='dev',

@@ -49,3 +49,15 @@ docker run -p 5000:5000 -v instance:/app/instance -e FLASK_APP=flaskr -e FLASK_E
 ```
 https://open-telemetry.github.io/opentelemetry-python/getting-started.html
 ```
+
+
+https://opentelemetry.io/docs/instrumentation/python/getting-started/
+
+
+
+
+https://opentelemetry.io/docs/instrumentation/python/getting-started/#configure-exporters-to-emit-spans-elsewhere
+
+docker run -p 16686:16686 -p 6831:6831/udp jaegertracing/all-in-one
+
+http://localhost:16686
