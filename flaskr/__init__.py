@@ -2,13 +2,13 @@ from flask import Flask
 import requests
 import os
 import logging
-# from opentelemetry import trace
-# from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-# from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-# from opentelemetry.sdk.trace import TracerProvider
-# from opentelemetry.sdk.trace.export import BatchSpanProcessor
-# from opentelemetry.instrumentation.flask import FlaskInstrumentor
-# from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 
 # from opentelemetry.sdk.trace.export import (
 #     BatchSpanProcessor,
@@ -19,20 +19,20 @@ import logging
 def create_app(test_config=None):
     logging.basicConfig(level=logging.DEBUG)
 
-    # trace.set_tracer_provider(
-    #     TracerProvider(
-    #         resource=Resource.create({SERVICE_NAME: "flaskr"})
-    #     )
-    # )
+    trace.set_tracer_provider(
+        TracerProvider(
+            resource=Resource.create({SERVICE_NAME: "flaskr"})
+        )
+    )
 
-    # jaeger_exporter = JaegerExporter(
-    #     agent_host_name="tempo-distributed-distributor.tempo-distributed",
-    #     agent_port=6831,
-    # )
+    jaeger_exporter = JaegerExporter(
+        agent_host_name="tempo-distributed-distributor.tempo-distributed",
+        agent_port=6831,
+    )
 
-    # trace.get_tracer_provider().add_span_processor(
-    #     BatchSpanProcessor(jaeger_exporter)
-    # )
+    trace.get_tracer_provider().add_span_processor(
+        BatchSpanProcessor(jaeger_exporter)
+    )
 
     # trace.set_tracer_provider(TracerProvider())
     # trace.get_tracer_provider().add_span_processor(
@@ -66,9 +66,9 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/hello')
     def hello():
-        # tracer = trace.get_tracer(__name__)
-        # with tracer.start_as_current_span("example-request"):
-        requests.get("http://google.com")
+        tracer = trace.get_tracer(__name__)
+        with tracer.start_as_current_span("example-request"):
+            requests.get("http://google.com")
 
         return 'Hello, World!'
 
