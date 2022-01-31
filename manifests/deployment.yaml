@@ -45,6 +45,12 @@ spec:
         volumeMounts:
         - name: db-volume
           mountPath: /app/instance
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 5
       imagePullSecrets:
         - name: regcred
       volumes:

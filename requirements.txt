@@ -2,4 +2,8 @@ flask
 pytest
 coverage
 waitress
+opentelemetry-api
+opentelemetry-sdk
 opentelemetry-instrumentation-flask
+opentelemetry-instrumentation-requests
+requests

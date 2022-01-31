@@ -1,44 +1,30 @@
-import os
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
-# from logging.config import dictConfig
 from flask import Flask
-
-# https://opentelemetry-python-contrib.readthedocs.io/en/latest/instrumentation/flask/flask.html
-# https://grafana.com/docs/tempo/latest/getting-started/
-# https://github.com/grafana/agent/blob/v0.8.0/production/kubernetes/agent-tempo.yaml
-# https://github.com/grafana/agent
-
-# import logging
-# logger = logging.getLogger('waitress')
-# logger.setLevel(logging.DEBUG)
-
+import requests
+import os
 import logging
+from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    ConsoleSpanExporter,
+    SimpleExportSpanProcessor
+)
 
-
-# dictConfig({
-#     'version': 1,
-#     'formatters': {'default': {
-#         'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-#     }},
-#     'handlers': {'wsgi': {
-#         'class': 'logging.StreamHandler',
-#         'stream': 'ext://sys.stdout',
-#         'formatter': 'default'
-#     }},
-#     'root': {
-#         'level': 'INFO',
-#         'handlers': ['wsgi']
-#     }
-# })
 
 def create_app(test_config=None):
     logging.basicConfig(level=logging.DEBUG)
+
+    trace.set_tracer_provider(TracerProvider())
+    trace.get_tracer_provider().add_span_processor(
+        SimpleExportSpanProcessor(ConsoleSpanExporter())
+    )
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
     FlaskInstrumentor().instrument_app(app)
-
+    RequestsInstrumentor().instrument()
 
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -61,6 +47,10 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/hello')
     def hello():
+        tracer = trace.get_tracer(__name__)
+        with tracer.start_as_current_span("example-request"):
+            requests.get("http://google.com")
+
         return 'Hello, World!'
 
     from . import db

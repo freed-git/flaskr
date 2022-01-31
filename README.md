@@ -45,3 +45,7 @@ waitress-serve --listen=127.0.0.1:8080 --call flaskr:create_app
 
 docker run -p 5000:5000 -v instance:/app/instance -e FLASK_APP=flaskr -e FLASK_ENV=development deepvoid/flaskr -- run --host=0.0.0.0
 ```
+
+```
+https://open-telemetry.github.io/opentelemetry-python/getting-started.html
+```
