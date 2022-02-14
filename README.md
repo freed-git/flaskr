@@ -58,6 +58,23 @@ https://opentelemetry.io/docs/instrumentation/python/getting-started/
 
 https://opentelemetry.io/docs/instrumentation/python/getting-started/#configure-exporters-to-emit-spans-elsewhere
 
-docker run -p 16686:16686 -p 6831:6831/udp jaegertracing/all-in-one
+docker run --rm -p 16686:16686 -p 6831:6831/udp jaegertracing/all-in-one
 
-http://localhost:16686
+http://localhost:16686/
+
+
+https://anecdotes.dev/opentelemetry-observability-as-a-standard-8c0c8bd231f0
+
+
+
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md
+
+
+
+
+
+pip install opentelemetry-instrumentation
+opentelemetry-bootstrap --action=install
+
+
+https://opentelemetry.lightstep.com/python/

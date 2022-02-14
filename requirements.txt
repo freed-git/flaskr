@@ -5,6 +5,7 @@ waitress
 opentelemetry-api
 opentelemetry-sdk
 opentelemetry-instrumentation-flask
-opentelemetry-instrumentation-requests
-opentelemetry-exporter-jaeger
+# opentelemetry-instrumentation-requests
+opentelemetry-instrumentation-logging
+# opentelemetry-exporter-jaeger
 requests

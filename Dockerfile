@@ -2,6 +2,7 @@ FROM python:3.8-slim-buster
 
 ENV FLASK_APP=flaskr
 ENV FLASK_ENV=development
+ENV OTEL_PYTHON_LOG_CORRELATION=true
 
 COPY ./requirements.txt /app/requirements.txt
 

@@ -1,4 +1,7 @@
 import functools
+from flask import current_app
+import sqlite3
+from contextlib import closing
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -14,7 +17,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        # db = get_db()
         error = None
 
         if not username:
@@ -23,16 +26,33 @@ def register():
             error = 'Password is required.'
 
         if error is None:
-            try:
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"User {username} is already registered."
-            else:
-                return redirect(url_for("auth.login"))
+            # try:
+            #     db.execute(
+            #         "INSERT INTO user (username, password) VALUES (?, ?)",
+            #         (username, generate_password_hash(password)),
+            #     )
+            #     db.commit()
+            # except db.IntegrityError:
+            #     error = f"User {username} is already registered."
+            # else:
+            #     return redirect(url_for("auth.login"))
+
+            database = current_app.config['DATABASE']
+            detect_types = sqlite3.PARSE_DECLTYPES
+
+            with closing(sqlite3.connect(database=database, detect_types=detect_types)) as connection:
+                try:
+                    connection.row_factory = sqlite3.Row
+                    with closing(connection.cursor()) as cursor:
+                        cursor.execute(
+                            "INSERT INTO user (username, password) VALUES (?, ?)",
+                            (username, generate_password_hash(password)),
+                        )
+                    connection.commit()
+                except connection.IntegrityError:
+                    error = f"User {username} is already registered."
+                else:
+                    return redirect(url_for("auth.login"))
 
         flash(error)
 
@@ -43,11 +63,21 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        # db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        # user = db.execute(
+        #     'SELECT * FROM user WHERE username = ?', (username,)
+        # ).fetchone()
+
+        database = current_app.config['DATABASE']
+        detect_types = sqlite3.PARSE_DECLTYPES
+
+        with closing(sqlite3.connect(database=database, detect_types=detect_types)) as connection:
+            connection.row_factory = sqlite3.Row
+            with closing(connection.cursor()) as cursor:
+                user = cursor.execute(
+                    'SELECT * FROM user WHERE username = ?', (username,)
+                ).fetchone()
 
         if user is None:
             error = 'Incorrect username.'
@@ -70,9 +100,18 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        # g.user = get_db().execute(
+        #     'SELECT * FROM user WHERE id = ?', (user_id,)
+        # ).fetchone()
+        database = current_app.config['DATABASE']
+        detect_types = sqlite3.PARSE_DECLTYPES
+
+        with closing(sqlite3.connect(database=database, detect_types=detect_types)) as connection:
+            connection.row_factory = sqlite3.Row
+            with closing(connection.cursor()) as cursor:
+                g.user = cursor.execute(
+                    'SELECT * FROM user WHERE id = ?', (user_id,)
+                ).fetchone()
 
 @bp.route('/logout')
 def logout():
