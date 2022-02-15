@@ -7,5 +7,6 @@ opentelemetry-sdk
 opentelemetry-instrumentation-flask
 # opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-logging
+opentelemetry-instrumentation-sqlite3
 opentelemetry-exporter-jaeger
 requests
