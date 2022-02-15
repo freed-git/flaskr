@@ -21,11 +21,11 @@ def create_app(test_config=None):
         )
     )
 
-    exporter = ConsoleSpanExporter()
-    # exporter = JaegerExporter(
-    #     agent_host_name="localhost",
-    #     agent_port=6831,
-    # )
+    # exporter = ConsoleSpanExporter()
+    exporter = JaegerExporter(
+        agent_host_name="tempo-distributed-distributor.tempo-distributed",
+        agent_port=6831,
+    )
 
     trace.get_tracer_provider().add_span_processor(
         BatchSpanProcessor(exporter)
