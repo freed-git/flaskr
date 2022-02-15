@@ -78,3 +78,7 @@ opentelemetry-bootstrap --action=install
 
 
 https://opentelemetry.lightstep.com/python/
+
+
+LOKI filter
+{namespace="flaskr"} |~ `trace_id=\w+` != "trace_id=0"
