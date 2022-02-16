@@ -82,3 +82,69 @@ https://opentelemetry.lightstep.com/python/
 
 LOKI filter
 {namespace="flaskr"} |~ `trace_id=\w+` != "trace_id=0"
+
+{namespace="flaskr"} |~ "trace_id=[^0]+"
+
+
+<!-- apiVersion: 1
+ 
+deleteDatasources:
+  - name: Prometheus
+  - name: Tempo
+  - name: Loki
+ 
+datasources:
+- name: Prometheus
+  type: prometheus
+  access: proxy
+  orgId: 1
+  url: http://prometheus:9090
+  basicAuth: false
+  isDefault: false
+  version: 1
+  editable: false
+- name: Tempo
+  type: tempo
+  access: proxy
+  orgId: 1
+  url: http://tempo-query:16686
+  basicAuth: false
+  isDefault: false
+  version: 1
+  editable: false
+  apiVersion: 1
+  uid: tempo
+ 
+- name: Loki
+  type: loki
+  access: proxy
+  orgId: 1
+  url: http://loki:3100
+  basicAuth: false
+  isDefault: false
+  version: 1
+  editable: false
+  apiVersion: 1
+  jsonData:
+    derivedFields:
+      - datasourceUid: tempo
+        matcherRegex: \[.+,(.+),.+\]
+        name: TraceID
+        url: $${__value.raw} -->
+
+
+# python logging
+https://everythingtech.dev/2021/03/python-logging-with-json-formatter/
+
+gunicorn \
+--bind 0.0.0.0:5000 "flaskr:create_app()" \
+--access-logfile - \
+--error-logfile - \
+--capture-output \
+--access-logformat  "{'remote_ip':'%(h)s','request_id':'%({X-Request-Id}i)s','response_code':'%(s)s','request_method':'%(m)s','request_path':'%(U)s','request_querystring':'%(q)s','request_timetaken':'%(D)s','response_length':'%(B)s'}"
+
+
+
+127.0.0.1 - - [16/Feb/2022:13:25:56 -0500] "GET /static/style.css HTTP/1.1" 304 0 "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36"
+
+{'remote_ip':'127.0.0.1','request_id':'-','response_code':'304','request_method':'GET','request_path':'/static/style.css','request_querystring':'','request_timetaken':'1872','response_length':'0'}

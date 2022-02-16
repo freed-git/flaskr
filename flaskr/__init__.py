@@ -39,7 +39,20 @@ def create_app(test_config=None):
 
     # OTEL
     FlaskInstrumentor().instrument_app(app)
-    LoggingInstrumentor().instrument()
+
+    logging_format = '''{
+    "asctime": "%(asctime)s",
+    "levelname": "%(levelname)s",
+    "name": "[%(name)s]",
+    "filename": "%(filename)s",
+    "lineno": "%(lineno)d",
+    "trace_id": "%(otelTraceID)s",
+    "span_id": "%(otelSpanID)s",
+    "resource_service_name": "%(otelServiceName)s",
+    "message": "%(message)s"
+}'''
+
+    LoggingInstrumentor().instrument(logging_format=logging_format)
     SQLite3Instrumentor().instrument()
 
     app.config.from_mapping(
