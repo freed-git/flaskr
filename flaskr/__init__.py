@@ -31,15 +31,6 @@ def create_app(test_config=None):
         BatchSpanProcessor(exporter)
     )
 
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-
-    # log = logging.getLogger('werkzeug')
-    # log.setLevel(logging.ERROR)
-
-    # OTEL
-    FlaskInstrumentor().instrument_app(app)
-
     logging_format = '''{
     "asctime": "%(asctime)s",
     "levelname": "%(levelname)s",
@@ -53,6 +44,16 @@ def create_app(test_config=None):
 }'''
 
     LoggingInstrumentor().instrument(logging_format=logging_format)
+
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+
+
+    # log = logging.getLogger('werkzeug')
+    # log.setLevel(logging.ERROR)
+
+    # OTEL
+    FlaskInstrumentor().instrument_app(app)
     SQLite3Instrumentor().instrument()
 
     app.config.from_mapping(
