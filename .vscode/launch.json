@@ -12,6 +12,7 @@
             "env": {
                 "FLASK_APP": "flaskr",
                 "FLASK_ENV": "development",
+                // "FLASK_DEBUG": "false",
                 "OTEL_PYTHON_LOG_CORRELATION": "true",
                 "OTEL_PYTHON_FLASK_EXCLUDED_URLS": "health,/*.css,/favicon.ico",
                 "OTEL_PYTHON_LOG_LEVEL": "debug"
