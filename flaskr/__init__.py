@@ -31,9 +31,9 @@ def create_app(test_config=None):
         BatchSpanProcessor(exporter)
     )
 
-    logging_format = '{"asctime": "%(asctime)s","levelname": "%(levelname)s","name": "[%(name)s]","filename": "%(filename)s","lineno": "%(lineno)d","trace_id": "%(otelTraceID)s","span_id": "%(otelSpanID)s","resource_service_name": "%(otelServiceName)s","message": "%(message)s"}'
+    # logging_format = '{"asctime": "%(asctime)s","levelname": "%(levelname)s","name": "[%(name)s]","filename": "%(filename)s","lineno": "%(lineno)d","trace_id": "%(otelTraceID)s","span_id": "%(otelSpanID)s","resource_service_name": "%(otelServiceName)s","message": "%(message)s"}'
 
-    LoggingInstrumentor().instrument(logging_format=logging_format)
+    LoggingInstrumentor().instrument()
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
