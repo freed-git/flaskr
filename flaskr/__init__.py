@@ -12,8 +12,8 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
 # import sqlite3
-# from prometheus_client import generate_latest
-from prometheus_client.openmetrics.exposition import generate_latest
+from prometheus_client import generate_latest
+# from prometheus_client.openmetrics.exposition import generate_latest
 from prometheus_client import CollectorRegistry
 
 registry = CollectorRegistry()
