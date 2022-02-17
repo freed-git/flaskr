@@ -148,3 +148,10 @@ gunicorn \
 127.0.0.1 - - [16/Feb/2022:13:25:56 -0500] "GET /static/style.css HTTP/1.1" 304 0 "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36"
 
 {'remote_ip':'127.0.0.1','request_id':'-','response_code':'304','request_method':'GET','request_path':'/static/style.css','request_querystring':'','request_timetaken':'1872','response_length':'0'}
+
+
+{namespace="flaskr"} |= "trace_id=b925b9c2bef46051747062bb365b986e"
+
+{namespace="flaskr"} |~ "trace_id=[^0]"
+
+https://dev.to/camptocamp-ops/implement-prometheus-metrics-in-a-flask-application-p18

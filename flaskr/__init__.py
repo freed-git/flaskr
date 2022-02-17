@@ -12,6 +12,11 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
 # import sqlite3
+# from prometheus_client import generate_latest
+from prometheus_client.openmetrics.exposition import generate_latest
+from prometheus_client import CollectorRegistry
+
+registry = CollectorRegistry()
 
 def create_app(test_config=None):
     # OTEL
@@ -66,6 +71,10 @@ def create_app(test_config=None):
     @app.route('/health')
     def hello():
         return 'OK'
+
+    @app.route('/metrics')
+    def metrics():
+        return generate_latest(registry=registry)
 
     from . import db
     db.init_app(app)

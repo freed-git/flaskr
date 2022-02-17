@@ -15,7 +15,8 @@
                 // "FLASK_DEBUG": "false",
                 "OTEL_PYTHON_LOG_CORRELATION": "true",
                 "OTEL_PYTHON_FLASK_EXCLUDED_URLS": "health,/*.css,/favicon.ico",
-                "OTEL_PYTHON_LOG_LEVEL": "debug"
+                "OTEL_PYTHON_LOG_LEVEL": "debug",
+                "OTEL_RESOURCE_ATTRIBUTES": "namespace=flaskr"
             },
             "args": [
                 "run",

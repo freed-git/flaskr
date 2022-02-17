@@ -10,3 +10,4 @@ opentelemetry-instrumentation-logging
 opentelemetry-instrumentation-sqlite3
 opentelemetry-exporter-jaeger
 requests
+prometheus-client
