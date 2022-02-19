@@ -1,4 +1,5 @@
-from flask import Flask
+from codecs import BOM_BE
+from flask import Flask, make_response
 import requests
 import os
 import logging
@@ -12,13 +13,15 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
 # import sqlite3
-from prometheus_client import generate_latest
-# from prometheus_client.openmetrics.exposition import generate_latest
-from prometheus_client import CollectorRegistry
+# from prometheus_client import generate_latest
+from prometheus_client.openmetrics.exposition import generate_latest
+from prometheus_client import CollectorRegistry, REGISTRY, CONTENT_TYPE_LATEST
 
-registry = CollectorRegistry()
+# registry = CollectorRegistry()
 
 def create_app(test_config=None):
+
+
     # OTEL
     trace.set_tracer_provider(
         TracerProvider(
@@ -74,7 +77,14 @@ def create_app(test_config=None):
 
     @app.route('/metrics')
     def metrics():
-        return generate_latest(registry=registry)
+        # return generate_latest(registry=REGISTRY)
+        data = generate_latest(REGISTRY)
+
+        response = make_response(data)
+        response.headers['Content-Type'] = CONTENT_TYPE_LATEST
+        response.headers['Content-Length'] = str(len(data))
+
+        return response
 
     from . import db
     db.init_app(app)

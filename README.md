@@ -155,3 +155,23 @@ gunicorn \
 {namespace="flaskr"} |~ "trace_id=[^0]"
 
 https://dev.to/camptocamp-ops/implement-prometheus-metrics-in-a-flask-application-p18
+
+
+# WORKS!!! NO EXEMPLAR
+
+# HELP blog_total blog count
+# TYPE blog_total counter
+blog_total{endpoint="/",method="GET"} 1.0
+# HELP blog_created blog count
+# TYPE blog_created gauge
+blog_created{endpoint="/",method="GET"} 1.6451326524687583e+09
+
+
+
+# BAD!!!
+
+# HELP blog blog count
+# TYPE blog counter
+blog_total{endpoint="/",method="GET"} 1.0 # {traceID="56334540713124196021878971227834585574"} 1.0 1645132870.0607898
+blog_created{endpoint="/",method="GET"} 1.6451328700607107e+09
+# EOF

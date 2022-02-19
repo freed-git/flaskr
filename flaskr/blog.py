@@ -15,9 +15,9 @@ from prometheus_client import Counter
 bp = Blueprint('blog', __name__)
 
 tracer = trace.get_tracer_provider().get_tracer(__name__)
-from flaskr import registry
+from prometheus_client import REGISTRY
 
-blog_counter = Counter('blog', 'blog count', ['method', 'endpoint'], registry=registry)
+blog_counter = Counter('blog', 'blog count', ['method', 'endpoint'], registry=REGISTRY)
 
 def add_trace(f):
 
