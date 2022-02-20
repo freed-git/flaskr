@@ -13,9 +13,14 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.instrumentation.sqlite3 import SQLite3Instrumentor
 # import sqlite3
-# from prometheus_client import generate_latest
-from prometheus_client.openmetrics.exposition import generate_latest
+from prometheus_client import generate_latest
+# from prometheus_client.openmetrics.exposition import generate_latest
 from prometheus_client import CollectorRegistry, REGISTRY, CONTENT_TYPE_LATEST
+
+
+
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from prometheus_client.exposition import make_wsgi_app
 
 # registry = CollectorRegistry()
 
@@ -75,16 +80,16 @@ def create_app(test_config=None):
     def hello():
         return 'OK'
 
-    @app.route('/metrics')
-    def metrics():
-        # return generate_latest(registry=REGISTRY)
-        data = generate_latest(REGISTRY)
+    # @app.route('/metrics')
+    # def metrics():
+    #     # return generate_latest(registry=REGISTRY)
+    #     data = generate_latest(REGISTRY)
 
-        response = make_response(data)
-        response.headers['Content-Type'] = CONTENT_TYPE_LATEST
-        response.headers['Content-Length'] = str(len(data))
+    #     response = make_response(data)
+    #     response.headers['Content-Type'] = CONTENT_TYPE_LATEST
+    #     response.headers['Content-Length'] = str(len(data))
 
-        return response
+    #     return response
 
     from . import db
     db.init_app(app)
@@ -95,5 +100,9 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
+
+    app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+        '/metrics': make_wsgi_app(registry=REGISTRY)
+    })
 
     return app

@@ -175,3 +175,29 @@ blog_created{endpoint="/",method="GET"} 1.6451326524687583e+09
 blog_total{endpoint="/",method="GET"} 1.0 # {traceID="56334540713124196021878971227834585574"} 1.0 1645132870.0607898
 blog_created{endpoint="/",method="GET"} 1.6451328700607107e+09
 # EOF
+
+
+curl -s http://dc.host.tld:9116/metrics | ./promtool check metrics
+
+
+https://www.robustperception.io/invalid-is-not-a-valid-start-token-and-other-scrape-errors
+
+wget https://github.com/prometheus/prometheus/releases/download/v2.33.3/prometheus-2.33.3.linux-amd64.tar.gz
+
+cd prometheus-2.33.3.linux-amd64/
+
+curl -s https://flaskr.eks01.gameloft.org/metrics | ./promtool check metrics
+
+curl -s -H 'Accept: application/openmetrics-text' https://flaskr.eks01.gameloft.org/metrics | ./promtool check metrics
+
+https://sysdig.com/blog/openmetrics-is-prometheus-unbound/
+
+
+curl -s -H 'Accept: application/openmetrics-text' https://flaskr.eks01.gameloft.org/metrics | python3 -c 'import sys; from prometheus_client.openmetrics import parser; list(parser.text_string_to_metric_families(sys.stdin.buffer.read().decode("utf-8")))'
+
+https://prometheus.io/docs/instrumenting/exposition_formats/
+
+
+
+
+curl -s -H 'Accept: application/openmetrics-text' http://172.22.191.48:5000/metrics
