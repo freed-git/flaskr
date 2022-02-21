@@ -34,7 +34,7 @@ def add_trace(f):
 @bp.route('/')
 def index():
     current_app.logger.info("blog index")
-    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
+    # blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
 
     # db = get_db()
     # posts = db.execute(

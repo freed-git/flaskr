@@ -201,3 +201,4 @@ https://prometheus.io/docs/instrumenting/exposition_formats/
 
 
 curl -s -H 'Accept: application/openmetrics-text' http://172.22.191.48:5000/metrics
+curl -s -H 'Accept: application/openmetrics-text' https://flaskr.eks01.gameloft.org/metrics
