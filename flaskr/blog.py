@@ -34,7 +34,7 @@ def add_trace(f):
 @bp.route('/')
 def index():
     current_app.logger.info("blog index")
-    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': str(trace.get_current_span().context.trace_id)})
+    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
 
     # db = get_db()
     # posts = db.execute(
@@ -61,7 +61,7 @@ def index():
 @login_required
 def create():
     current_app.logger.info("blog create")
-    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': str(trace.get_current_span().context.trace_id)})
+    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
 
     if request.method == 'POST':
         title = request.form['title']
@@ -134,7 +134,7 @@ def get_post(id, check_author=True):
 @login_required
 def update(id):
     current_app.logger.info("blog update")
-    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': str(trace.get_current_span().context.trace_id)})
+    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
 
     post = get_post(id)
 
@@ -179,7 +179,7 @@ def update(id):
 @login_required
 def delete(id):
     current_app.logger.info("blog delete")
-    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': str(trace.get_current_span().context.trace_id)})
+    blog_counter.labels(request.method, request.path).inc(exemplar={'traceID': trace.format_trace_id(trace.get_current_span().context.trace_id)})
 
     get_post(id)
     # db = get_db()
